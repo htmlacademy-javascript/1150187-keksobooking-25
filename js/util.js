@@ -5,9 +5,9 @@ const getRandomFraction = (min, max, afterDecimalPoint) => {
 };
 const getRandomArrayElement = (array) => array[getRandomNumber(0, array.length - 1)];
 const createRandomArray = (array) => array.slice(0, getRandomNumber(1, array.length));
-function getRandomAvatarImage() {
+const getRandomAvatarImage = () => {
   let i = 1;
-  return function () {
+  return () => {
     let avatarURL = '';
     if (i < 10) {
       avatarURL = `img/avatars/user0${i}.png`;
@@ -17,6 +17,6 @@ function getRandomAvatarImage() {
     i++;
     return avatarURL;
   };
-}
+};
 
 export {getRandomNumber, getRandomFraction, getRandomArrayElement, createRandomArray, getRandomAvatarImage};
