@@ -1,4 +1,5 @@
-import {createSimilarAdvertisements} from './data.js';
+import { renderAdvertisement } from './render-ad.js';
 
-// eslint-disable-next-line no-console
-console.log(createSimilarAdvertisements());
+const mapElement = document.querySelector('#map-canvas');
+
+renderAdvertisement(mapElement, 1);
