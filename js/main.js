@@ -1,5 +1,3 @@
-import { renderAdvertisement } from './render-ad.js';
+import { activatePage } from './form.js';
 
-const mapElement = document.querySelector('#map-canvas');
-
-renderAdvertisement(mapElement, 1);
+activatePage();
