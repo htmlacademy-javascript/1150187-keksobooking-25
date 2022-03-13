@@ -16,10 +16,9 @@ const MIN_LAT = 35.65;
 const MAX_LAT = 35.7;
 const MIN_LNG = 139.7;
 const MAX_LNG = 139.8;
-const ADVERTISEMENTS_AMOUNT = 10;
 const randomAvatar = getRandomAvatarImage();
 
-const createAdvertisement = () => {
+const generateAdvertisementData = () => {
   const randomLat = getRandomFraction(MIN_LAT, MAX_LAT, 5);
   const randomLng = getRandomFraction(MIN_LNG, MAX_LNG, 5);
 
@@ -49,6 +48,4 @@ const createAdvertisement = () => {
   return advertisementObject;
 };
 
-const createSimilarAdvertisements = () => Array.from({ length: ADVERTISEMENTS_AMOUNT }, createAdvertisement);
-
-export { createSimilarAdvertisements, createAdvertisement };
+export { generateAdvertisementData };
