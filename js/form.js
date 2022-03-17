@@ -36,31 +36,21 @@ const pristine = new Pristine(form, {
   errorTextParent: 'ad-form__element'
 });
 
+const roomCapacityValidation = () => {
+  if (roomNumber.value >= capacity.value || (roomNumber.value === 100 && capacity.value === 0)) {
+    return true;
+  }
+
+  return false;
+};
+
+pristine.addValidator(roomNumber, roomCapacityValidation, 'Количество комнат не может быть меньше количества гостей');
+pristine.addValidator(capacity, roomCapacityValidation, 'Количество комнат не может быть меньше количества гостей');
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   pristine.validate();
-
-  pristine.addValidator(roomNumber, () => {
-    if (roomNumber.value >= capacity.value) {
-      return true;
-    } else if (roomNumber.value === 100 && capacity.value === 0) {
-      return true;
-    }
-
-    return false;
-  }, 'Количество комнат не может быть меньше количества гостей');
-
-  pristine.addValidator(capacity, () => {
-    if (capacity.value <= roomNumber.value) {
-      return true;
-    } else if (roomNumber.value === 100 && capacity.value === 0) {
-      return true;
-    }
-
-    return false;
-  }, 'Количество комнат не может быть меньше количества гостей');
 });
 
-export {deactivatePage, activatePage};
+export { deactivatePage, activatePage };
