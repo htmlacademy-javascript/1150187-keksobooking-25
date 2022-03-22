@@ -1,3 +1,5 @@
-import { activatePage } from './form.js';
+import { deactivateForm } from './form.js';
+import { initMap } from './map.js';
 
-activatePage();
+deactivateForm();
+initMap();

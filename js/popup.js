@@ -1,8 +1,6 @@
-import { generateAdvertisementData } from './data.js';
-
 const card = document.querySelector('#card').content.querySelector('.popup');
 
-const generateAdvertisementCard = (renderData) => {
+const generatePopup = (renderData) => {
   const features = renderData.offer.features.slice();
   const photos = renderData.offer.photos.slice();
   const photoList = document.createDocumentFragment();
@@ -93,10 +91,4 @@ const generateAdvertisementCard = (renderData) => {
   return popup;
 };
 
-const renderAdvertisement = (targetElement, qty) => {
-  for (let i = 0; i < qty; i++) {
-    targetElement.append(generateAdvertisementCard(generateAdvertisementData()));
-  }
-};
-
-export { renderAdvertisement };
+export { generatePopup };
