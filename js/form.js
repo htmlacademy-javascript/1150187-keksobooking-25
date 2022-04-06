@@ -1,3 +1,5 @@
+import { sendData } from './network.js';
+
 const form = document.querySelector('.ad-form');
 const formElements = form.querySelectorAll('fieldset');
 const filter = document.querySelector('.map__filters');
@@ -10,6 +12,8 @@ const checkInDropdown = form.querySelector('#timein');
 const checkOutDropdown = form.querySelector('#timeout');
 const addressInput = form.querySelector('#address');
 const priceSlider = form.querySelector('.ad-form__slider');
+const submitBtn = form.querySelector('.ad-form__submit');
+const resetBtn = form.querySelector('.ad-form__reset');
 
 const propertyTypeMinPrice = {
   bungalow: 0,
@@ -46,6 +50,10 @@ const activateForm = () => {
   });
 };
 
+const resetForm = () => {
+  form.reset();
+};
+
 noUiSlider.create(priceSlider, {
   range: {
     min: 0,
@@ -55,14 +63,12 @@ noUiSlider.create(priceSlider, {
   step: 1,
   connect: 'lower',
   format: {
-    to: function (value) {
+    to: (value) => {
       if (Number.isInteger(value)) {
         return value.toFixed(0);
       }
     },
-    from: function (value) {
-      return parseFloat(value);
-    },
+    from: (value) => parseFloat(value),
   },
 });
 
@@ -93,6 +99,8 @@ propertyTypeDropdown.addEventListener('change', () => {
   });
 });
 
+resetBtn.addEventListener('click', resetForm);
+
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element'
@@ -103,10 +111,36 @@ const validateRoomCapacity = () => roomNumber.value >= capacity.value || (roomNu
 pristine.addValidator(roomNumber, validateRoomCapacity, 'Количество комнат не может быть меньше количества гостей');
 pristine.addValidator(capacity, validateRoomCapacity, 'Количество комнат не может быть меньше количества гостей');
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+const disableSubmitBtn = (btnElement) => {
+  btnElement.disabled = true;
+  btnElement.textContent = 'Публикую...';
+};
 
-  pristine.validate();
-});
+const enableSubmitBtn = (btnElement) => {
+  btnElement.disabled = false;
+  btnElement.textContent = 'Опубликовать';
+};
 
-export { deactivateForm, activateForm, addressInput };
+const setUserFormSubmit = (onSuccess, onError) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      disableSubmitBtn(submitBtn);
+      sendData(
+        () => {
+          onSuccess();
+          enableSubmitBtn(submitBtn);
+        },
+        () => {
+          onError();
+          enableSubmitBtn(submitBtn);
+        },
+        new FormData(evt.target)
+      );
+    }
+  });
+};
+
+export { deactivateForm, activateForm, addressInput, setUserFormSubmit };

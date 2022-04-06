@@ -1,8 +1,8 @@
 const card = document.querySelector('#card').content.querySelector('.popup');
 
 const generatePopup = (renderData) => {
-  const features = renderData.offer.features.slice();
-  const photos = renderData.offer.photos.slice();
+  const features = renderData.offer.features;
+  const photos = renderData.offer.photos;
   const photoList = document.createDocumentFragment();
   const featuresList = card.querySelectorAll('.popup__feature');
   const popup = card.cloneNode(true);
@@ -35,32 +35,37 @@ const generatePopup = (renderData) => {
     element.classList.add('visually-hidden');
   };
 
-  featuresList.forEach((featureItem) => {
-    const isNecessary = features.some(
-      (feature) => featureItem.classList.contains(`popup__feature--${feature}`),
-    );
+  if (features) {
+    featuresList.forEach((featureItem) => {
+      const isNecessary = features.some(
+        (feature) => featureItem.classList.contains(`popup__feature--${feature}`),
+      );
 
-    if (!isNecessary) {
-      featureItem.remove();
-    }
-  });
-
-  for (let i = 0; i < photos.length; i++) {
-    const PHOTO_WIDTH = '45';
-    const PHOTO_HEIGHT = '40';
-    const photoElement = document.createElement('img');
-
-    photoElement.classList.add('popup__photo');
-    photoElement.width = PHOTO_WIDTH;
-    photoElement.height = PHOTO_HEIGHT;
-    photoElement.src = photos[i];
-    photoElement.alt = 'Фотография жилья';
-
-    popupPhotos.innerHTML = '';
-    photoList.append(photoElement);
+      if (!isNecessary) {
+        featureItem.remove();
+      }
+    });
   }
 
-  popupPhotos.append(photoList);
+  if (photos) {
+    for (let i = 0; i < photos.length; i++) {
+      const PHOTO_WIDTH = '45';
+      const PHOTO_HEIGHT = '40';
+      const photoElement = document.createElement('img');
+
+      photoElement.classList.add('popup__photo');
+      photoElement.width = PHOTO_WIDTH;
+      photoElement.height = PHOTO_HEIGHT;
+      photoElement.src = photos[i];
+      photoElement.alt = 'Фотография жилья';
+
+      popupPhotos.innerHTML = '';
+      // if (photos.length > 1) {
+      photoList.append(photoElement);
+      // }
+    }
+    popupPhotos.append(photoList);
+  }
 
   fillDataText(renderData.offer.title, popupTitle);
   fillDataText(renderData.offer.address, popupAddress);

@@ -1,4 +1,5 @@
-import { generateAdvertisementData } from './data.js';
+import { getData } from './network.js';
+import { getRandomNumber } from './util.js';
 import { generatePopup } from './popup.js';
 import { activateForm, addressInput } from './form.js';
 
@@ -45,8 +46,7 @@ const initMap = () => {
   const pinsGroup = L.layerGroup().addTo(map);
 
   mainPin.addTo(pinsGroup);
-
-  const advertisementData = Array.from({ length: 10 }, generateAdvertisementData);
+  addressInput.value = `${mainPin.getLatLng().lat.toFixed(5)}, ${mainPin.getLatLng().lng.toFixed(5)}`;
 
   const createPin = (element) => {
     const lat = element.location.lat;
@@ -67,8 +67,11 @@ const initMap = () => {
       .bindPopup(generatePopup(element));
   };
 
-  advertisementData.forEach((element) => {
-    createPin(element);
+  getData((data) => {
+    const randomNumber = getRandomNumber(0, 39);
+    data.slice(randomNumber, randomNumber + 10).forEach((element) => {
+      createPin(element);
+    });
   });
 
   mainPin.on('move', (evt) => {
