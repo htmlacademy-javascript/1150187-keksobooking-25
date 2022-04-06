@@ -1,7 +1,5 @@
+import './map.js';
 import { showSendSuccessMsg, showSendError } from './network.js';
-import { deactivateForm, setUserFormSubmit } from './form.js';
-import { initMap } from './map.js';
+import { setUserFormSubmit } from './form.js';
 
-deactivateForm();
-initMap();
 setUserFormSubmit(showSendSuccessMsg, showSendError);

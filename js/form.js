@@ -1,4 +1,5 @@
 import { sendData } from './network.js';
+import { resetMainPin } from './map.js';
 
 const form = document.querySelector('.ad-form');
 const formElements = form.querySelectorAll('fieldset');
@@ -52,6 +53,7 @@ const activateForm = () => {
 
 const resetForm = () => {
   form.reset();
+  resetMainPin();
 };
 
 noUiSlider.create(priceSlider, {
@@ -132,6 +134,7 @@ const setUserFormSubmit = (onSuccess, onError) => {
         () => {
           onSuccess();
           enableSubmitBtn(submitBtn);
+          resetForm();
         },
         () => {
           onError();

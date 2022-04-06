@@ -1,3 +1,5 @@
+const PHOTO_WIDTH = '45';
+const PHOTO_HEIGHT = '40';
 const card = document.querySelector('#card').content.querySelector('.popup');
 
 const generatePopup = (renderData) => {
@@ -47,10 +49,10 @@ const generatePopup = (renderData) => {
     });
   }
 
+  popupPhotos.innerHTML = '';
+
   if (photos) {
     for (let i = 0; i < photos.length; i++) {
-      const PHOTO_WIDTH = '45';
-      const PHOTO_HEIGHT = '40';
       const photoElement = document.createElement('img');
 
       photoElement.classList.add('popup__photo');
@@ -59,10 +61,7 @@ const generatePopup = (renderData) => {
       photoElement.src = photos[i];
       photoElement.alt = 'Фотография жилья';
 
-      popupPhotos.innerHTML = '';
-      // if (photos.length > 1) {
       photoList.append(photoElement);
-      // }
     }
     popupPhotos.append(photoList);
   }
