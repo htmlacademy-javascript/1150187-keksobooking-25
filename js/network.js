@@ -1,3 +1,8 @@
+import { filterAdverts } from './filter.js';
+
+const ERROR_MSG_DURATION = 5000;
+const ADVERTISEMENTS_AMOUNT = 10;
+
 const showLoadError = () => {
   const errorMessage = document.createElement('div');
   errorMessage.style.padding = '15px';
@@ -13,7 +18,7 @@ const showLoadError = () => {
 
   setTimeout(() => {
     errorMessage.remove();
-  }, 5000);
+  }, ERROR_MSG_DURATION);
 };
 
 const showSendError = () => {
@@ -49,15 +54,12 @@ const showSendSuccessMsg = () => {
   document.body.append(successTemplate);
 };
 
-const getData = (onSuccess) =>
-  fetch('https://25.javascript.pages.academy/keksobooking/data')
-    .then((response) => response.json())
-    .then((data) => {
-      onSuccess(data);
-    })
-    .catch(() =>
-      showLoadError()
-    );
+const getData = () => fetch('https://25.javascript.pages.academy/keksobooking/data')
+  .then((response) => response.json())
+  .then((offers) => offers.filter(filterAdverts).slice(0, ADVERTISEMENTS_AMOUNT))
+  .catch(() => {
+    showLoadError();
+  });
 
 const sendData = (onSuccess, onError, body) => {
   fetch(
