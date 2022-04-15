@@ -3,7 +3,6 @@ const typeFilter = filters.querySelector('#housing-type');
 const priceFilter = filters.querySelector('#housing-price');
 const roomsFilter = filters.querySelector('#housing-rooms');
 const guestsFilter = filters.querySelector('#housing-guests');
-const selectedFeatures = filters.querySelectorAll('.map__checkbox:checked');
 
 const priceMap = {
   low: { min: 0, max: 10000 },
@@ -12,6 +11,8 @@ const priceMap = {
 };
 
 const filterAdverts = (advertisement) => {
+  const selectedFeatures = filters.querySelectorAll('.map__checkbox:checked');
+
   const checkType = () => typeFilter.value === 'any' || advertisement.offer.type === typeFilter.value;
   const checkPrice = () => priceFilter.value === 'any' ? true : advertisement.offer.price >= priceMap[priceFilter.value].min && advertisement.offer.price < priceMap[priceFilter.value].max;
   const checkRooms = () => roomsFilter.value === 'any' || advertisement.offer.rooms === Number(roomsFilter.value);
