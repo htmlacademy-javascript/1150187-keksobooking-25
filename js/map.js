@@ -2,7 +2,9 @@ import { deactivateForm, activateForm, addressInput } from './form.js';
 import { getData } from './network.js';
 import { RENDER_DELAY, debounce } from './util.js';
 import { generatePopup } from './popup.js';
-import { setFilterChange, filters } from './filter.js';
+import { filters, filterAdverts } from './filter.js';
+
+const ADVERTISEMENTS_AMOUNT = 10;
 
 deactivateForm();
 
@@ -43,31 +45,34 @@ const pinsGroup = L.layerGroup().addTo(map);
 
 addressInput.value = `${mainPin.getLatLng().lat.toFixed(5)}, ${mainPin.getLatLng().lng.toFixed(5)}`;
 
-const createPin = () => {
-  getData().then((data) => {
-    pinsGroup.clearLayers();
-    data.forEach((element) => {
-      const { lat, lng } = element.location;
-      const icon = L.icon({
-        iconUrl: './img/pin.svg',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      });
-      const marker = L.marker({
-        lat,
-        lng,
-      },
-      {
-        icon,
-      });
-      marker.addTo(pinsGroup).bindPopup(generatePopup(element));
+const createPin = (array) => {
+  pinsGroup.clearLayers();
+  array.filter(filterAdverts).slice(0, ADVERTISEMENTS_AMOUNT).forEach((element) => {
+    const { lat, lng } = element.location;
+    const icon = L.icon({
+      iconUrl: './img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
     });
+    const marker = L.marker({
+      lat,
+      lng,
+    },
+    {
+      icon,
+    });
+    marker.addTo(pinsGroup).bindPopup(generatePopup(element));
   });
 };
 
-createPin();
+let pins = [];
 
-setFilterChange(debounce(() => createPin(), RENDER_DELAY), filters);
+getData().then((array) => {
+  pins = array;
+  createPin(pins);
+});
+
+filters.addEventListener('change', debounce(() => createPin(pins), RENDER_DELAY));
 
 mainPin.on('move', (evt) => {
   addressInput.value = `${evt.target.getLatLng().lat.toFixed(5)}, ${evt.target.getLatLng().lng.toFixed(5)}`;

@@ -1,7 +1,4 @@
-import { filterAdverts } from './filter.js';
-
 const ERROR_MSG_DURATION = 5000;
-const ADVERTISEMENTS_AMOUNT = 10;
 
 const showLoadError = () => {
   const errorMessage = document.createElement('div');
@@ -56,7 +53,7 @@ const showSendSuccessMsg = () => {
 
 const getData = () => fetch('https://25.javascript.pages.academy/keksobooking/data')
   .then((response) => response.json())
-  .then((offers) => offers.filter(filterAdverts).slice(0, ADVERTISEMENTS_AMOUNT))
+  .then((offers) => offers)
   .catch(() => {
     showLoadError();
   });
