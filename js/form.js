@@ -1,6 +1,8 @@
 import { sendData } from './network.js';
 import { resetMainPin } from './map.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const form = document.querySelector('.ad-form');
 const formElements = form.querySelectorAll('fieldset');
 const filter = document.querySelector('.map__filters');
@@ -15,6 +17,10 @@ const addressInput = form.querySelector('#address');
 const priceSlider = form.querySelector('.ad-form__slider');
 const submitBtn = form.querySelector('.ad-form__submit');
 const resetBtn = form.querySelector('.ad-form__reset');
+const avatarInput = form.querySelector('.ad-form__field input');
+const avatarPreview = form.querySelector('.ad-form-header__preview img');
+const propertyImageInput = form.querySelector('.ad-form__upload input');
+const propertyImagePreview = form.querySelector('.ad-form__photo');
 
 const propertyTypeMinPrice = {
   bungalow: 0,
@@ -51,6 +57,17 @@ const activateForm = () => {
   });
 };
 
+const createPicturePreview = (fileInput, filePreviewElement) => {
+  const file = fileInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    filePreviewElement.src = URL.createObjectURL(file);
+  }
+};
+
 const resetForm = () => {
   form.reset();
   resetMainPin();
@@ -72,6 +89,19 @@ noUiSlider.create(priceSlider, {
     },
     from: (value) => parseFloat(value),
   },
+});
+
+avatarInput.addEventListener('change', () => {
+  createPicturePreview(avatarInput, avatarPreview);
+});
+
+propertyImageInput.addEventListener('change', () => {
+  const propertyPreview = document.createElement('img');
+  propertyPreview.width = 40;
+  propertyPreview.height = 44;
+  propertyImagePreview.innerHTML = '';
+  createPicturePreview(propertyImageInput, propertyPreview);
+  propertyImagePreview.append(propertyPreview);
 });
 
 priceSlider.noUiSlider.on('update', () => {
