@@ -21,32 +21,40 @@ const showLoadError = () => {
 const showSendError = () => {
   const errorTemplate = document.querySelector('#error').content.querySelector('.error');
   const tryAgainBtn = errorTemplate.querySelector('.error__button');
-  const closeErrorMsg = () => {
-    errorTemplate.remove();
-  };
 
-  errorTemplate.addEventListener('click', closeErrorMsg);
-  tryAgainBtn.addEventListener('click', closeErrorMsg);
-  document.addEventListener('keydown', (evt) => {
+  const onErrorMsgEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
       closeErrorMsg();
     }
-  });
+  };
+
+  function closeErrorMsg() {
+    errorTemplate.remove();
+    document.removeEventListener('keydown', onErrorMsgEscKeydown);
+  }
+
+  errorTemplate.addEventListener('click', closeErrorMsg);
+  tryAgainBtn.addEventListener('click', closeErrorMsg);
+  document.addEventListener('keydown', onErrorMsgEscKeydown);
   document.body.append(errorTemplate);
 };
 
 const showSendSuccessMsg = () => {
   const successTemplate = document.querySelector('#success').content.querySelector('.success');
-  const closeSendSuccessMsg = () => {
-    successTemplate.remove();
-  };
 
-  successTemplate.addEventListener('click', closeSendSuccessMsg);
-  document.addEventListener('keydown', (evt) => {
+  const onSuccessMsgEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
       closeSendSuccessMsg();
     }
-  });
+  };
+
+  function closeSendSuccessMsg() {
+    successTemplate.remove();
+    document.removeEventListener('keydown', onSuccessMsgEscKeydown);
+  }
+
+  successTemplate.addEventListener('click', closeSendSuccessMsg);
+  document.addEventListener('keydown', onSuccessMsgEscKeydown);
 
   document.body.append(successTemplate);
 };
