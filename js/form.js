@@ -36,11 +36,11 @@ const deactivateForm = () => {
   filter.classList.add('ad-form--disabled');
 
   formElements.forEach((element) => {
-    element.setAttribute('disabled', true);
+    element.setAttribute('disabled', 'disabled');
   });
 
   filterElements.forEach((element) => {
-    element.setAttribute('disabled', true);
+    element.setAttribute('disabled', 'disabled');
   });
 };
 
@@ -68,9 +68,22 @@ const createPicturePreview = (fileInput, filePreviewElement) => {
   }
 };
 
+const resetImages = () => {
+  if (avatarPreview.src !== 'img/muffin-grey.svg') {
+    avatarPreview.src = 'img/muffin-grey.svg';
+  }
+
+  if (propertyImagePreview.querySelector('img')) {
+    propertyImagePreview.querySelector('img').remove();
+  }
+};
+
 const resetForm = () => {
   form.reset();
+  priceSlider.noUiSlider.set(0);
   resetMainPin();
+  resetImages();
+  price.value = propertyTypeMinPrice[propertyTypeDropdown.value];
 };
 
 noUiSlider.create(priceSlider, {
@@ -160,6 +173,7 @@ const setUserFormSubmit = (onSuccess, onError) => {
     const isValid = pristine.validate();
     if (isValid) {
       disableSubmitBtn(submitBtn);
+      const formData = new FormData(evt.target);
       sendData(
         () => {
           onSuccess();
@@ -170,7 +184,7 @@ const setUserFormSubmit = (onSuccess, onError) => {
           onError();
           enableSubmitBtn(submitBtn);
         },
-        new FormData(evt.target)
+        formData
       );
     }
   });

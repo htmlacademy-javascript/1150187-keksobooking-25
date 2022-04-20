@@ -1,5 +1,8 @@
 const ERROR_MSG_DURATION = 5000;
 
+const successTemplatePopup = document.querySelector('#success').content.querySelector('.success');
+const errorTemplatePopup = document.querySelector('#error').content.querySelector('.error');
+
 const showLoadError = () => {
   const errorMessage = document.createElement('div');
   errorMessage.style.padding = '15px';
@@ -19,28 +22,28 @@ const showLoadError = () => {
 };
 
 const showSendError = () => {
-  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  const errorTemplate = errorTemplatePopup.cloneNode(true);
   const tryAgainBtn = errorTemplate.querySelector('.error__button');
 
   const onErrorMsgEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
-      closeErrorMsg();
+      onErrorMsgClose();
     }
   };
 
-  function closeErrorMsg() {
+  function onErrorMsgClose() {
     errorTemplate.remove();
     document.removeEventListener('keydown', onErrorMsgEscKeydown);
   }
 
-  errorTemplate.addEventListener('click', closeErrorMsg);
-  tryAgainBtn.addEventListener('click', closeErrorMsg);
+  errorTemplate.addEventListener('click', onErrorMsgClose);
+  tryAgainBtn.addEventListener('click', onErrorMsgClose);
   document.addEventListener('keydown', onErrorMsgEscKeydown);
   document.body.append(errorTemplate);
 };
 
 const showSendSuccessMsg = () => {
-  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successTemplate = successTemplatePopup.cloneNode(true);
 
   const onSuccessMsgEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
@@ -81,8 +84,9 @@ const sendData = (onSuccess, onError, body) => {
         onError('Не удалось отправить форму. Попробуйте ещё раз');
       }
     })
-    .catch(() => {
+    .catch((evt) => {
       onError('Не удалось отправить форму. Попробуйте ещё раз');
+      throw new Error(evt);
     });
 };
 
