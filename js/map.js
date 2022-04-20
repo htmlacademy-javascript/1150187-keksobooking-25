@@ -87,4 +87,4 @@ const resetMainPin = () => {
   addressInput.setAttribute('value', `${startingCoordinates.lat}, ${startingCoordinates.lng}`);
 };
 
-export { resetMainPin };
+export { resetMainPin, pins, createPin };

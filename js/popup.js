@@ -1,13 +1,60 @@
 const PHOTO_WIDTH = '45';
 const PHOTO_HEIGHT = '40';
+
 const card = document.querySelector('#card').content.querySelector('.popup');
 
+const propertyTypes = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель'
+};
+
+const fillDataText = (data, element) => {
+  if (!data) {
+    element.classList.add('visually-hidden');
+  }
+  element.textContent = data;
+};
+
+const hideElement = (element) => {
+  element.classList.add('visually-hidden');
+};
+
+const drawPhotos = (photos) => {
+  const photoList = document.createDocumentFragment();
+  photos.forEach((photo) => {
+    const photoElement = document.createElement('img');
+
+    photoElement.classList.add('popup__photo');
+    photoElement.width = PHOTO_WIDTH;
+    photoElement.height = PHOTO_HEIGHT;
+    photoElement.src = photo;
+    photoElement.alt = 'Фотография жилья';
+
+    photoList.append(photoElement);
+  });
+  return photoList;
+};
+
+const removeUnecessaryFeatures = (featuresList, features) => {
+  featuresList.forEach((featureItem) => {
+    const isNecessary = features.some(
+      (feature) => featureItem.classList.contains(`popup__feature--${feature}`),
+    );
+
+    if (!isNecessary) {
+      featureItem.remove();
+    }
+  });
+};
+
 const generatePopup = (renderData) => {
+  const popup = card.cloneNode(true);
   const features = renderData.offer.features;
   const photos = renderData.offer.photos;
-  const photoList = document.createDocumentFragment();
-  const featuresList = card.querySelectorAll('.popup__feature');
-  const popup = card.cloneNode(true);
+  const featuresList = popup.querySelectorAll('.popup__feature');
   const popupTitle = popup.querySelector('.popup__title');
   const popupAddress = popup.querySelector('.popup__text--address');
   const popupPrice = popup.querySelector('.popup__text--price');
@@ -18,52 +65,14 @@ const generatePopup = (renderData) => {
   const popupPhotos = popup.querySelector('.popup__photos');
   const popupAvatar = popup.querySelector('.popup__avatar');
 
-  const propertyTypes = {
-    flat: 'Квартира',
-    bungalow: 'Бунгало',
-    house: 'Дом',
-    palace: 'Дворец',
-    hotel: 'Отель'
-  };
-
-  const fillDataText = (data, element) => {
-    if (!data) {
-      element.classList.add('visually-hidden');
-    }
-    element.textContent = data;
-  };
-
-  const hideElement = (element) => {
-    element.classList.add('visually-hidden');
-  };
-
   if (features) {
-    featuresList.forEach((featureItem) => {
-      const isNecessary = features.some(
-        (feature) => featureItem.classList.contains(`popup__feature--${feature}`),
-      );
-
-      if (!isNecessary) {
-        featureItem.remove();
-      }
-    });
+    removeUnecessaryFeatures(featuresList, features);
   }
 
   popupPhotos.innerHTML = '';
 
   if (photos) {
-    for (let i = 0; i < photos.length; i++) {
-      const photoElement = document.createElement('img');
-
-      photoElement.classList.add('popup__photo');
-      photoElement.width = PHOTO_WIDTH;
-      photoElement.height = PHOTO_HEIGHT;
-      photoElement.src = photos[i];
-      photoElement.alt = 'Фотография жилья';
-
-      photoList.append(photoElement);
-    }
-    popupPhotos.append(photoList);
+    popupPhotos.append(drawPhotos(photos));
   }
 
   fillDataText(renderData.offer.title, popupTitle);

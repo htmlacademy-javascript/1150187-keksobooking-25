@@ -32,7 +32,7 @@ const filterAdverts = (advertisement) => {
     }
   };
 
-  if (
+  return (
     checkType()
     &&
     checkPrice()
@@ -42,9 +42,7 @@ const filterAdverts = (advertisement) => {
     checkGuests()
     &&
     checkFeatures()
-  ) {
-    return true;
-  }
+  );
 };
 
 export { filterAdverts, filters };
