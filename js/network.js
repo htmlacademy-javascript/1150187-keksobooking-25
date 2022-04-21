@@ -27,17 +27,17 @@ const showSendError = () => {
 
   const onErrorMsgEscKeydown = (evt) => {
     if (evt.key === 'Escape') {
-      onErrorMsgClose();
+      onErrorMsgCloseBtnClick();
     }
   };
 
-  function onErrorMsgClose() {
+  function onErrorMsgCloseBtnClick() {
     errorTemplate.remove();
     document.removeEventListener('keydown', onErrorMsgEscKeydown);
   }
 
-  errorTemplate.addEventListener('click', onErrorMsgClose);
-  tryAgainBtn.addEventListener('click', onErrorMsgClose);
+  errorTemplate.addEventListener('click', onErrorMsgCloseBtnClick);
+  tryAgainBtn.addEventListener('click', onErrorMsgCloseBtnClick);
   document.addEventListener('keydown', onErrorMsgEscKeydown);
   document.body.append(errorTemplate);
 };
